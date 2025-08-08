@@ -27,4 +27,9 @@ class Kopi < Formula
   test do
     system "#{bin}/kopi", "--version"
   end
+
+  livecheck do
+    url :stable
+    regex(/^v?(\d+(?:\.\d+)+)$/i)
+  end
 end
