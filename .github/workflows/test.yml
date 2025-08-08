@@ -1,0 +1,30 @@
+on:
+  workflow_dispatch:
+
+name: Install Test
+jobs:
+  install:
+    name: Simple Install Test
+    runs-on: macos-15-large
+
+    steps:
+      - name: Install
+        run: brew install kopi-vm/tap/kopi
+
+      - name: Run kopi
+        run: kopi --version
+
+  tap-test:
+    name: Tap Test
+    runs-on: macos-15-large
+
+    steps:
+      - name: Tap
+        run: brew tap kopi-vm/tap
+
+      - name: Install
+        run: brew install kopi
+
+      - name: Run kopi
+        run: kopi --version
+
