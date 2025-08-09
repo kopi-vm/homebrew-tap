@@ -7,12 +7,12 @@ class Kopi < Formula
   on_macos do
     on_intel do
       url "https://github.com/kopi-vm/kopi/releases/download/v0.0.7/kopi-0.0.7-macos-x86_64.tar.gz"
-      sha256 "bce86e185cb484ce03cb0d7fb45d398a1b9476b1acedc20a19f7a47e1584b5e0"
+      sha256 "27febb55c205740af3093a7438686bb7f9878bad57268b243507235626eaac8c"
     end
 
     on_arm do
       url "https://github.com/kopi-vm/kopi/releases/download/v0.0.7/kopi-0.0.7-macos-aarch64.tar.gz"
-      sha256 "37b0429564181dc272e5e2d372d85e74b7a7adda7c89d2e5fd49535cee4af01a"
+      sha256 "72141b95867bc12a627538cd8103af4869fd93f3cdd374c6bc2cca37e4916db7"
     end
   end
 
