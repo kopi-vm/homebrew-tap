@@ -20,8 +20,15 @@ class Kopi < Formula
     bin.install "kopi", "kopi-shim"
   end
 
-  def post_install
-    system "#{bin}/kopi", "setup"
+  def caveats
+    <<~EOS
+      Thanks for installing Kopi! To get started, you need to run the setup command.
+      This will initialize your configuration and prepare the environment.
+
+      Please run:
+
+        kopi setup
+    EOS
   end
 
   test do
