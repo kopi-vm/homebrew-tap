@@ -3,9 +3,16 @@ on:
 
 name: Install Test
 jobs:
+  
+
   install:
     name: Simple Install Test
-    runs-on: macos-15-large
+
+    strategy:
+      matrix:
+        os: [ macos-15, macos-15-large ]
+        version: [ "24", "zulu@21", "liberica@17" ]
+    runs-on: ${{ matrix.os }}
 
     steps:
       - name: Install
@@ -15,21 +22,25 @@ jobs:
         run: kopi setup
       
       - name: Install Java
-        run: kopi install 24
+        run: kopi install ${{ matrix.version }}
       
       - name: Use Java
-        run: kopi global 24
+        run: kopi global ${{ matrix.version }}
       
       - name: Run Java
         run: |
           export PATH="/Users/runner/.kopi/shims:$PATH"
-          ls -al /Users/runner/.kopi/jdks/temurin-24.0.2/
-          which java
+          ls -al /Users/runner/.kopi/jdks/
+          kopi env
+          kopi current
           java --version
 
   tap-test:
     name: Tap Test
-    runs-on: macos-15-large
+    strategy:
+      matrix:
+        os: [ macos-15, macos-15-large ]
+    runs-on: ${{ matrix.os }}
 
     steps:
       - name: Tap
