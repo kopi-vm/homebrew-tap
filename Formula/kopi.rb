@@ -2,17 +2,17 @@ class Kopi < Formula
   desc "Kopi is a JDK version management tool written in Rust that integrates with your shell to seamlessly switch between different Java Development Kit versions."
   homepage "https://kopi-vm.github.io/"
   license "Apache-2.0"
-  version "0.0.7"
+  version "0.0.8"
 
   on_macos do
     on_intel do
-      url "https://github.com/kopi-vm/kopi/releases/download/v0.0.7/kopi-0.0.7-macos-x86_64.tar.gz"
-      sha256 "27febb55c205740af3093a7438686bb7f9878bad57268b243507235626eaac8c"
+      url "https://github.com/kopi-vm/kopi/releases/download/v0.0.8/kopi-0.0.8-macos-x86_64.tar.gz"
+      sha256 "1408d2c0fe387329745175244a75cd2cb78c7dd138d41097ee376a2f2239619f"
     end
 
     on_arm do
-      url "https://github.com/kopi-vm/kopi/releases/download/v0.0.7/kopi-0.0.7-macos-aarch64.tar.gz"
-      sha256 "72141b95867bc12a627538cd8103af4869fd93f3cdd374c6bc2cca37e4916db7"
+      url "https://github.com/kopi-vm/kopi/releases/download/v0.0.8/kopi-0.0.8-macos-aarch64.tar.gz"
+      sha256 "4def15eaa17a75c6a8c8789a3a050d77b4c3e869e4300e4f84eafc3784dcfb33"
     end
   end
 
