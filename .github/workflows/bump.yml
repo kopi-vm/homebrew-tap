@@ -1,0 +1,42 @@
+on:
+  workflow_dispatch:
+  schedule:
+    # run every 4 hours
+    - cron: '20 */4 * * *'
+name: Bump
+jobs:
+  bump:
+    name: Bump
+    runs-on: macos-15-large
+
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Bump
+        run: brew bump --formula=kopi --no-audit || true
+
+      - name: Check Status
+        id: check_status
+        run: |
+          if ! git diff-index --quiet HEAD; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Push Changes
+        if: steps.check_status.outputs.changed == 'true'
+        run: |
+          NEW_VERSION=$(brew info --json=v2 --formula kopi | jq -r '.formulae[0].versions.stable')
+
+          git add Formula/kopi.rb
+          git commit -m "kopi: Update to version v${NEW_VERSION}"
+          git push origin main
