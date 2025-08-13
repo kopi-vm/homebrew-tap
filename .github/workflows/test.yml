@@ -11,8 +11,21 @@ jobs:
       - name: Install
         run: brew install kopi-vm/tap/kopi
 
-      - name: Run kopi
-        run: kopi --version
+      - name: Setup kopi
+        run: kopi setup
+      
+      - name: Install Java
+        run: kopi install 24
+      
+      - name: Use Java
+        run: kopi global 24
+      
+      - name: Run Java
+        run: |
+          export PATH="/Users/runner/.kopi/shims:$PATH"
+          ls -al /Users/runner/.kopi/jdks/temurin-24.0.2/
+          which java
+          java --version
 
   tap-test:
     name: Tap Test
@@ -25,6 +38,6 @@ jobs:
       - name: Install
         run: brew install kopi
 
-      - name: Run kopi
-        run: kopi --version
+      - name: Setup kopi
+        run: kopi setup
 
