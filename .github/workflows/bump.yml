@@ -15,17 +15,65 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Bump
-        run: brew bump --formula=kopi --no-audit || true
-
-      - name: Check Status
-        id: check_status
+      - name: Fetch Metadata
+        id: metadata
         run: |
-          if ! git diff-index --quiet HEAD; then
-            echo "changed=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "changed=false" >> "$GITHUB_OUTPUT"
-          fi
+          brew tap kopi-vm/tap
+
+          LATEST=$(brew livecheck --quiet --json --newer-only kopi-vm/tap/kopi | jq -r '.[0].version.latest')
+          echo "version=${LATEST}" >> "$GITHUB_OUTPUT"
+
+          X86=$(curl -sL "https://github.com/kopi-vm/kopi/releases/download/v${LATEST}/kopi-${LATEST}-macos-x86_64.tar.gz.sha256")
+          echo "x86_hash=${X86}" >> "$GITHUB_OUTPUT"
+          
+          ARM=$(curl -sL "https://github.com/kopi-vm/kopi/releases/download/v${LATEST}/kopi-${LATEST}-macos-aarch64.tar.gz.sha256")
+          echo "arm_hash=${ARM}" >> "$GITHUB_OUTPUT"
+
+      - name: Bump Formula
+        run: |
+          cat > Formula/kopi.rb <<EOF
+          class Kopi < Formula
+            desc "JDK version management tool"
+            homepage "https://kopi-vm.github.io/"
+            version "${{steps.metadata.outputs.version}}"
+            license "Apache-2.0"
+
+            livecheck do
+              url :stable
+              regex(/^v?(\d+(?:\.\d+)+)$/i)
+            end
+
+            on_macos do
+              on_intel do
+                url "https://github.com/kopi-vm/kopi/releases/download/v${{steps.metadata.outputs.version}}/kopi-${{steps.metadata.outputs.version}}-macos-x86_64.tar.gz"
+                sha256 "${{steps.metadata.outputs.x86_hash}}"
+              end
+
+              on_arm do
+                url "https://github.com/kopi-vm/kopi/releases/download/v${{steps.metadata.outputs.version}}/kopi-${{steps.metadata.outputs.version}}-macos-aarch64.tar.gz"
+                sha256 "${{steps.metadata.outputs.arm_hash}}"
+              end
+            end
+
+            def install
+              bin.install "kopi", "kopi-shim"
+            end
+
+            def caveats
+              <<~EOS
+                Thanks for installing Kopi! To get started, you need to run the setup command.
+                This will initialize your configuration and prepare the environment.
+
+                Please run:
+
+                  kopi setup
+              EOS
+            end
+
+            test do
+              system "#{bin}/kopi", "--version"
+            end
+          end
 
       - name: Configure Git
         run: |
@@ -33,10 +81,12 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
       - name: Push Changes
-        if: steps.check_status.outputs.changed == 'true'
         run: |
-          NEW_VERSION=$(brew info --json=v2 --formula kopi | jq -r '.formulae[0].versions.stable')
+          if ! git diff-index --quiet HEAD; then
+            git add Formula/kopi.rb
+            git commit -m "kopi: Update to version v${{steps.metadata.outputs.version}}"
+            git push origin main
+          else
+            echo "Version ${{steps.metadata.outputs.version}} has already updated."
+          fi
 
-          git add Formula/kopi.rb
-          git commit -m "kopi: Update to version v${NEW_VERSION}"
-          git push origin main
