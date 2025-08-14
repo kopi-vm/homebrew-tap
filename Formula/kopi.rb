@@ -1,8 +1,13 @@
 class Kopi < Formula
-  desc "Kopi is a JDK version management tool written in Rust that integrates with your shell to seamlessly switch between different Java Development Kit versions."
+  desc "JDK version management tool"
   homepage "https://kopi-vm.github.io/"
-  license "Apache-2.0"
   version "0.0.8"
+  license "Apache-2.0"
+
+  livecheck do
+    url :stable
+    regex(/^v?(\d+(?:\.\d+)+)$/i)
+  end
 
   on_macos do
     on_intel do
@@ -33,10 +38,5 @@ class Kopi < Formula
 
   test do
     system "#{bin}/kopi", "--version"
-  end
-
-  livecheck do
-    url :stable
-    regex(/^v?(\d+(?:\.\d+)+)$/i)
   end
 end
