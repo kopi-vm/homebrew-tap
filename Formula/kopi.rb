@@ -1,7 +1,7 @@
 class Kopi < Formula
   desc "JDK version management tool"
   homepage "https://kopi-vm.github.io/"
-  version "0.2.0"
+  version "0.2.3"
   license "Apache-2.0"
 
   livecheck do
@@ -11,13 +11,13 @@ class Kopi < Formula
 
   on_macos do
     on_intel do
-      url "https://github.com/kopi-vm/kopi/releases/download/v0.2.0/kopi-0.2.0-macos-x86_64.tar.gz"
-      sha256 "cff4d04910ad1d468e230e54c458187cf7bab4251db85ff7b04ddaf37fcf83cf"
+      url "https://github.com/kopi-vm/kopi/releases/download/v0.2.3/kopi-0.2.3-macos-x86_64.tar.gz"
+      sha256 "db256cddff636381625ef5ce146615a6e597c5b8b346d91e49c8040e5f30a36d"
     end
 
     on_arm do
-      url "https://github.com/kopi-vm/kopi/releases/download/v0.2.0/kopi-0.2.0-macos-aarch64.tar.gz"
-      sha256 "26c3c9ebf83730ce98605ae91bd931ca8260f049a2eacfabc169a75d66251ed0"
+      url "https://github.com/kopi-vm/kopi/releases/download/v0.2.3/kopi-0.2.3-macos-aarch64.tar.gz"
+      sha256 "655bf283652da9adda14c917116bac3934b6840092a8189b1b6a3bacfcd5c833"
     end
   end
 
